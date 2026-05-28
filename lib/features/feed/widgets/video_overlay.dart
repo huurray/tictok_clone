@@ -53,6 +53,8 @@ class VideoOverlay extends ConsumerWidget {
                       video: video,
                       onLikeTap: () =>
                           ref.read(feedProvider.notifier).toggleLike(index),
+                      onBookmarkTap: () =>
+                          ref.read(feedProvider.notifier).toggleBookmark(index),
                     ),
                   ],
                 ),

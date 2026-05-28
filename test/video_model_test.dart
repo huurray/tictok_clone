@@ -44,4 +44,18 @@ void main() {
       expect(v.likeCount, 5);
     });
   });
+
+  group('VideoModel.toggleBookmark', () {
+    test('bookmarks an unbookmarked video and increments the count', () {
+      final v = _make().toggleBookmark();
+      expect(v.isBookmarked, true);
+      expect(v.bookmarkCount, 1);
+    });
+
+    test('toggling twice returns to the original state', () {
+      final v = _make().toggleBookmark().toggleBookmark();
+      expect(v.isBookmarked, false);
+      expect(v.bookmarkCount, 0);
+    });
+  });
 }

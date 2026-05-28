@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:video_player/video_player.dart';
@@ -7,12 +8,17 @@ import 'package:tiktok/features/feed/providers/video_manager.dart';
 import 'package:tiktok/l10n/gen/app_localizations.dart';
 
 /// [VideoManager]에서 [index]의 컨트롤러를 가져와 화면을 가득 채워 렌더한다.
-/// 미초기화/버퍼링 중에는 스피너, 활성 영상이 일시정지면 재생 아이콘,
-/// 로드 실패 시 재시도 UI를 보여준다.
+/// 컨트롤러 init 전(캐시 다운로드 중)에는 [thumbnailUrl] 포스터 위에 스피너,
+/// 활성 영상이 일시정지면 재생 아이콘, 로드 실패 시 재시도 UI를 보여준다.
 class VideoPlayerView extends ConsumerWidget {
   final int index;
+  final String thumbnailUrl;
 
-  const VideoPlayerView({super.key, required this.index});
+  const VideoPlayerView({
+    super.key,
+    required this.index,
+    required this.thumbnailUrl,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -25,7 +31,7 @@ class VideoPlayerView extends ConsumerWidget {
         }
         final controller = manager.controllerAt(index);
         if (controller == null || !controller.value.isInitialized) {
-          return const _Loading();
+          return _Poster(thumbnailUrl: thumbnailUrl);
         }
         return ValueListenableBuilder<VideoPlayerValue>(
           valueListenable: controller,
@@ -69,14 +75,27 @@ class VideoPlayerView extends ConsumerWidget {
   }
 }
 
-class _Loading extends StatelessWidget {
-  const _Loading();
+/// 컨트롤러 init 전 보여줄 포스터(정지컷) + 스피너. 다운로드 지연을 시각적으로 가린다.
+class _Poster extends StatelessWidget {
+  final String thumbnailUrl;
+
+  const _Poster({required this.thumbnailUrl});
 
   @override
   Widget build(BuildContext context) {
-    return const ColoredBox(
-      color: Colors.black,
-      child: Center(child: CircularProgressIndicator()),
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        const ColoredBox(color: Colors.black),
+        CachedNetworkImage(
+          imageUrl: thumbnailUrl,
+          fit: BoxFit.cover,
+          fadeInDuration: const Duration(milliseconds: 150),
+          placeholder: (_, _) => const ColoredBox(color: Colors.black),
+          errorWidget: (_, _, _) => const ColoredBox(color: Colors.black),
+        ),
+        const Center(child: CircularProgressIndicator()),
+      ],
     );
   }
 }

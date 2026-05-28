@@ -44,7 +44,10 @@ class _VideoItemState extends ConsumerState<VideoItem> {
     return Stack(
       fit: StackFit.expand,
       children: [
-        VideoPlayerView(index: widget.index),
+        VideoPlayerView(
+          index: widget.index,
+          thumbnailUrl: widget.video.thumbnailUrl,
+        ),
         Positioned.fill(
           child: GestureDetector(
             behavior: HitTestBehavior.opaque,

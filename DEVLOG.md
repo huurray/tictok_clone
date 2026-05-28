@@ -82,3 +82,10 @@
 - **결정:** (b). `_ensure`에서 `DefaultCacheManager().getSingleFile(url)`로 로컬 파일을 얻어 `VideoPlayerController.file`로 init. `getSingleFile`/`initialize` await 도중 윈도우 이탈 대비해 기존 `_inWindow` 재검증 가드 유지. 다운로드 단계는 컨트롤러 등록 전이라 중복 `_ensure`를 막는 `_pending` 가드 추가.
 - **이유:** 재방문 시 디스크에서 즉시 재생 + 트래픽 절감. (c)의 LRU/추상화는 컨트롤러를 이미 ±1 윈도우로 한정하므로 과함 — 과제 범위 대비 복잡도만 키운다. 캐시 만료/용량은 flutter_cache_manager 기본 정책에 위임.
 - **검증:** 시뮬레이터 `Library/Caches/libCachedImageData`에 mp4 캐시 적재 확인(현재 윈도우 영상 2개, ~16MB), 재생 정상. analyze 0 / 테스트 13 통과.
+
+## 2026-05-28 — 미사용 필드 살리기: thumbnail 포스터 + 북마크 토글
+- **맥락:** JSON 스키마의 `thumbnailUrl`·`bookmarkCount`가 렌더/기능 없이 죽은 데이터였음("안 쓰는 필드 왜 있냐" 질문 트랩).
+- **대안:** (a) 두 필드 제거(YAGNI) (b) thumbnailUrl=로딩 포스터 + bookmarkCount=북마크 토글로 살림 (c) 현행 유지(스키마 현실성으로 방어).
+- **결정:** (b). thumbnailUrl은 컨트롤러 init 전 `BoxFit.cover` 포스터로(스피너 위 정지컷) 깔아 캐시 다운로드 지연을 시각적으로 가림. bookmarkCount는 사이드바에 북마크(저장) 토글 추가 — like 패턴 재사용(`BookmarkButton`, 활성색 amber). 모델에 `isBookmarked`(@Default false) + `toggleBookmark` 추가.
+- **이유:** thumbnailUrl 포스터는 거의 공짜로 "죽은 필드 살리기 + 첫 시청 지연 완화"를 동시에 해결(디스크 캐시의 유일한 약점인 첫 다운로드 지연을 보완). 북마크는 TikTok 실제 기능이라 authentic하고 사이드바 완성도↑. 둘 다 살리는 쪽이 제거보다 데모/완성도에 유리.
+- **검증:** 시뮬레이터에서 북마크 아이콘+카운트(678) 렌더, 포스터 동작, analyze 0 / 테스트 15(북마크 2개 추가) 통과.

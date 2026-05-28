@@ -11,6 +11,7 @@ class AppColors {
   static const Color textSecondary = Colors.white70;
   static const Color brandRed = Color(0xFFFE2C55);
   static const Color brandCyan = Color(0xFF25F4EE);
+  static const Color bookmark = Color(0xFFFACC15);
   static const Color divider = Colors.white24;
 }
 

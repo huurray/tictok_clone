@@ -19,6 +19,7 @@ _VideoModel _$VideoModelFromJson(Map<String, dynamic> json) => _VideoModel(
   bookmarkCount: (json['bookmarkCount'] as num).toInt(),
   shareCount: (json['shareCount'] as num).toInt(),
   isLiked: json['isLiked'] as bool? ?? false,
+  isBookmarked: json['isBookmarked'] as bool? ?? false,
 );
 
 Map<String, dynamic> _$VideoModelToJson(_VideoModel instance) =>
@@ -35,4 +36,5 @@ Map<String, dynamic> _$VideoModelToJson(_VideoModel instance) =>
       'bookmarkCount': instance.bookmarkCount,
       'shareCount': instance.shareCount,
       'isLiked': instance.isLiked,
+      'isBookmarked': instance.isBookmarked,
     };

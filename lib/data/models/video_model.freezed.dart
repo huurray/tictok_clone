@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$VideoModel {
 
- String get id; String get videoUrl; String get thumbnailUrl; String get username; String get caption; String get musicTitle; String get profileImageUrl; int get likeCount; int get commentCount; int get bookmarkCount; int get shareCount; bool get isLiked;
+ String get id; String get videoUrl; String get thumbnailUrl; String get username; String get caption; String get musicTitle; String get profileImageUrl; int get likeCount; int get commentCount; int get bookmarkCount; int get shareCount; bool get isLiked; bool get isBookmarked;
 /// Create a copy of VideoModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $VideoModelCopyWith<VideoModel> get copyWith => _$VideoModelCopyWithImpl<VideoMo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is VideoModel&&(identical(other.id, id) || other.id == id)&&(identical(other.videoUrl, videoUrl) || other.videoUrl == videoUrl)&&(identical(other.thumbnailUrl, thumbnailUrl) || other.thumbnailUrl == thumbnailUrl)&&(identical(other.username, username) || other.username == username)&&(identical(other.caption, caption) || other.caption == caption)&&(identical(other.musicTitle, musicTitle) || other.musicTitle == musicTitle)&&(identical(other.profileImageUrl, profileImageUrl) || other.profileImageUrl == profileImageUrl)&&(identical(other.likeCount, likeCount) || other.likeCount == likeCount)&&(identical(other.commentCount, commentCount) || other.commentCount == commentCount)&&(identical(other.bookmarkCount, bookmarkCount) || other.bookmarkCount == bookmarkCount)&&(identical(other.shareCount, shareCount) || other.shareCount == shareCount)&&(identical(other.isLiked, isLiked) || other.isLiked == isLiked));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is VideoModel&&(identical(other.id, id) || other.id == id)&&(identical(other.videoUrl, videoUrl) || other.videoUrl == videoUrl)&&(identical(other.thumbnailUrl, thumbnailUrl) || other.thumbnailUrl == thumbnailUrl)&&(identical(other.username, username) || other.username == username)&&(identical(other.caption, caption) || other.caption == caption)&&(identical(other.musicTitle, musicTitle) || other.musicTitle == musicTitle)&&(identical(other.profileImageUrl, profileImageUrl) || other.profileImageUrl == profileImageUrl)&&(identical(other.likeCount, likeCount) || other.likeCount == likeCount)&&(identical(other.commentCount, commentCount) || other.commentCount == commentCount)&&(identical(other.bookmarkCount, bookmarkCount) || other.bookmarkCount == bookmarkCount)&&(identical(other.shareCount, shareCount) || other.shareCount == shareCount)&&(identical(other.isLiked, isLiked) || other.isLiked == isLiked)&&(identical(other.isBookmarked, isBookmarked) || other.isBookmarked == isBookmarked));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,videoUrl,thumbnailUrl,username,caption,musicTitle,profileImageUrl,likeCount,commentCount,bookmarkCount,shareCount,isLiked);
+int get hashCode => Object.hash(runtimeType,id,videoUrl,thumbnailUrl,username,caption,musicTitle,profileImageUrl,likeCount,commentCount,bookmarkCount,shareCount,isLiked,isBookmarked);
 
 @override
 String toString() {
-  return 'VideoModel(id: $id, videoUrl: $videoUrl, thumbnailUrl: $thumbnailUrl, username: $username, caption: $caption, musicTitle: $musicTitle, profileImageUrl: $profileImageUrl, likeCount: $likeCount, commentCount: $commentCount, bookmarkCount: $bookmarkCount, shareCount: $shareCount, isLiked: $isLiked)';
+  return 'VideoModel(id: $id, videoUrl: $videoUrl, thumbnailUrl: $thumbnailUrl, username: $username, caption: $caption, musicTitle: $musicTitle, profileImageUrl: $profileImageUrl, likeCount: $likeCount, commentCount: $commentCount, bookmarkCount: $bookmarkCount, shareCount: $shareCount, isLiked: $isLiked, isBookmarked: $isBookmarked)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $VideoModelCopyWith<$Res>  {
   factory $VideoModelCopyWith(VideoModel value, $Res Function(VideoModel) _then) = _$VideoModelCopyWithImpl;
 @useResult
 $Res call({
- String id, String videoUrl, String thumbnailUrl, String username, String caption, String musicTitle, String profileImageUrl, int likeCount, int commentCount, int bookmarkCount, int shareCount, bool isLiked
+ String id, String videoUrl, String thumbnailUrl, String username, String caption, String musicTitle, String profileImageUrl, int likeCount, int commentCount, int bookmarkCount, int shareCount, bool isLiked, bool isBookmarked
 });
 
 
@@ -65,7 +65,7 @@ class _$VideoModelCopyWithImpl<$Res>
 
 /// Create a copy of VideoModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? videoUrl = null,Object? thumbnailUrl = null,Object? username = null,Object? caption = null,Object? musicTitle = null,Object? profileImageUrl = null,Object? likeCount = null,Object? commentCount = null,Object? bookmarkCount = null,Object? shareCount = null,Object? isLiked = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? videoUrl = null,Object? thumbnailUrl = null,Object? username = null,Object? caption = null,Object? musicTitle = null,Object? profileImageUrl = null,Object? likeCount = null,Object? commentCount = null,Object? bookmarkCount = null,Object? shareCount = null,Object? isLiked = null,Object? isBookmarked = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,videoUrl: null == videoUrl ? _self.videoUrl : videoUrl // ignore: cast_nullable_to_non_nullable
@@ -79,6 +79,7 @@ as int,commentCount: null == commentCount ? _self.commentCount : commentCount //
 as int,bookmarkCount: null == bookmarkCount ? _self.bookmarkCount : bookmarkCount // ignore: cast_nullable_to_non_nullable
 as int,shareCount: null == shareCount ? _self.shareCount : shareCount // ignore: cast_nullable_to_non_nullable
 as int,isLiked: null == isLiked ? _self.isLiked : isLiked // ignore: cast_nullable_to_non_nullable
+as bool,isBookmarked: null == isBookmarked ? _self.isBookmarked : isBookmarked // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }
@@ -164,10 +165,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String videoUrl,  String thumbnailUrl,  String username,  String caption,  String musicTitle,  String profileImageUrl,  int likeCount,  int commentCount,  int bookmarkCount,  int shareCount,  bool isLiked)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String videoUrl,  String thumbnailUrl,  String username,  String caption,  String musicTitle,  String profileImageUrl,  int likeCount,  int commentCount,  int bookmarkCount,  int shareCount,  bool isLiked,  bool isBookmarked)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _VideoModel() when $default != null:
-return $default(_that.id,_that.videoUrl,_that.thumbnailUrl,_that.username,_that.caption,_that.musicTitle,_that.profileImageUrl,_that.likeCount,_that.commentCount,_that.bookmarkCount,_that.shareCount,_that.isLiked);case _:
+return $default(_that.id,_that.videoUrl,_that.thumbnailUrl,_that.username,_that.caption,_that.musicTitle,_that.profileImageUrl,_that.likeCount,_that.commentCount,_that.bookmarkCount,_that.shareCount,_that.isLiked,_that.isBookmarked);case _:
   return orElse();
 
 }
@@ -185,10 +186,10 @@ return $default(_that.id,_that.videoUrl,_that.thumbnailUrl,_that.username,_that.
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String videoUrl,  String thumbnailUrl,  String username,  String caption,  String musicTitle,  String profileImageUrl,  int likeCount,  int commentCount,  int bookmarkCount,  int shareCount,  bool isLiked)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String videoUrl,  String thumbnailUrl,  String username,  String caption,  String musicTitle,  String profileImageUrl,  int likeCount,  int commentCount,  int bookmarkCount,  int shareCount,  bool isLiked,  bool isBookmarked)  $default,) {final _that = this;
 switch (_that) {
 case _VideoModel():
-return $default(_that.id,_that.videoUrl,_that.thumbnailUrl,_that.username,_that.caption,_that.musicTitle,_that.profileImageUrl,_that.likeCount,_that.commentCount,_that.bookmarkCount,_that.shareCount,_that.isLiked);case _:
+return $default(_that.id,_that.videoUrl,_that.thumbnailUrl,_that.username,_that.caption,_that.musicTitle,_that.profileImageUrl,_that.likeCount,_that.commentCount,_that.bookmarkCount,_that.shareCount,_that.isLiked,_that.isBookmarked);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -205,10 +206,10 @@ return $default(_that.id,_that.videoUrl,_that.thumbnailUrl,_that.username,_that.
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String videoUrl,  String thumbnailUrl,  String username,  String caption,  String musicTitle,  String profileImageUrl,  int likeCount,  int commentCount,  int bookmarkCount,  int shareCount,  bool isLiked)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String videoUrl,  String thumbnailUrl,  String username,  String caption,  String musicTitle,  String profileImageUrl,  int likeCount,  int commentCount,  int bookmarkCount,  int shareCount,  bool isLiked,  bool isBookmarked)?  $default,) {final _that = this;
 switch (_that) {
 case _VideoModel() when $default != null:
-return $default(_that.id,_that.videoUrl,_that.thumbnailUrl,_that.username,_that.caption,_that.musicTitle,_that.profileImageUrl,_that.likeCount,_that.commentCount,_that.bookmarkCount,_that.shareCount,_that.isLiked);case _:
+return $default(_that.id,_that.videoUrl,_that.thumbnailUrl,_that.username,_that.caption,_that.musicTitle,_that.profileImageUrl,_that.likeCount,_that.commentCount,_that.bookmarkCount,_that.shareCount,_that.isLiked,_that.isBookmarked);case _:
   return null;
 
 }
@@ -220,7 +221,7 @@ return $default(_that.id,_that.videoUrl,_that.thumbnailUrl,_that.username,_that.
 @JsonSerializable()
 
 class _VideoModel extends VideoModel {
-  const _VideoModel({required this.id, required this.videoUrl, required this.thumbnailUrl, required this.username, required this.caption, required this.musicTitle, required this.profileImageUrl, required this.likeCount, required this.commentCount, required this.bookmarkCount, required this.shareCount, this.isLiked = false}): super._();
+  const _VideoModel({required this.id, required this.videoUrl, required this.thumbnailUrl, required this.username, required this.caption, required this.musicTitle, required this.profileImageUrl, required this.likeCount, required this.commentCount, required this.bookmarkCount, required this.shareCount, this.isLiked = false, this.isBookmarked = false}): super._();
   factory _VideoModel.fromJson(Map<String, dynamic> json) => _$VideoModelFromJson(json);
 
 @override final  String id;
@@ -235,6 +236,7 @@ class _VideoModel extends VideoModel {
 @override final  int bookmarkCount;
 @override final  int shareCount;
 @override@JsonKey() final  bool isLiked;
+@override@JsonKey() final  bool isBookmarked;
 
 /// Create a copy of VideoModel
 /// with the given fields replaced by the non-null parameter values.
@@ -249,16 +251,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _VideoModel&&(identical(other.id, id) || other.id == id)&&(identical(other.videoUrl, videoUrl) || other.videoUrl == videoUrl)&&(identical(other.thumbnailUrl, thumbnailUrl) || other.thumbnailUrl == thumbnailUrl)&&(identical(other.username, username) || other.username == username)&&(identical(other.caption, caption) || other.caption == caption)&&(identical(other.musicTitle, musicTitle) || other.musicTitle == musicTitle)&&(identical(other.profileImageUrl, profileImageUrl) || other.profileImageUrl == profileImageUrl)&&(identical(other.likeCount, likeCount) || other.likeCount == likeCount)&&(identical(other.commentCount, commentCount) || other.commentCount == commentCount)&&(identical(other.bookmarkCount, bookmarkCount) || other.bookmarkCount == bookmarkCount)&&(identical(other.shareCount, shareCount) || other.shareCount == shareCount)&&(identical(other.isLiked, isLiked) || other.isLiked == isLiked));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _VideoModel&&(identical(other.id, id) || other.id == id)&&(identical(other.videoUrl, videoUrl) || other.videoUrl == videoUrl)&&(identical(other.thumbnailUrl, thumbnailUrl) || other.thumbnailUrl == thumbnailUrl)&&(identical(other.username, username) || other.username == username)&&(identical(other.caption, caption) || other.caption == caption)&&(identical(other.musicTitle, musicTitle) || other.musicTitle == musicTitle)&&(identical(other.profileImageUrl, profileImageUrl) || other.profileImageUrl == profileImageUrl)&&(identical(other.likeCount, likeCount) || other.likeCount == likeCount)&&(identical(other.commentCount, commentCount) || other.commentCount == commentCount)&&(identical(other.bookmarkCount, bookmarkCount) || other.bookmarkCount == bookmarkCount)&&(identical(other.shareCount, shareCount) || other.shareCount == shareCount)&&(identical(other.isLiked, isLiked) || other.isLiked == isLiked)&&(identical(other.isBookmarked, isBookmarked) || other.isBookmarked == isBookmarked));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,videoUrl,thumbnailUrl,username,caption,musicTitle,profileImageUrl,likeCount,commentCount,bookmarkCount,shareCount,isLiked);
+int get hashCode => Object.hash(runtimeType,id,videoUrl,thumbnailUrl,username,caption,musicTitle,profileImageUrl,likeCount,commentCount,bookmarkCount,shareCount,isLiked,isBookmarked);
 
 @override
 String toString() {
-  return 'VideoModel(id: $id, videoUrl: $videoUrl, thumbnailUrl: $thumbnailUrl, username: $username, caption: $caption, musicTitle: $musicTitle, profileImageUrl: $profileImageUrl, likeCount: $likeCount, commentCount: $commentCount, bookmarkCount: $bookmarkCount, shareCount: $shareCount, isLiked: $isLiked)';
+  return 'VideoModel(id: $id, videoUrl: $videoUrl, thumbnailUrl: $thumbnailUrl, username: $username, caption: $caption, musicTitle: $musicTitle, profileImageUrl: $profileImageUrl, likeCount: $likeCount, commentCount: $commentCount, bookmarkCount: $bookmarkCount, shareCount: $shareCount, isLiked: $isLiked, isBookmarked: $isBookmarked)';
 }
 
 
@@ -269,7 +271,7 @@ abstract mixin class _$VideoModelCopyWith<$Res> implements $VideoModelCopyWith<$
   factory _$VideoModelCopyWith(_VideoModel value, $Res Function(_VideoModel) _then) = __$VideoModelCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String videoUrl, String thumbnailUrl, String username, String caption, String musicTitle, String profileImageUrl, int likeCount, int commentCount, int bookmarkCount, int shareCount, bool isLiked
+ String id, String videoUrl, String thumbnailUrl, String username, String caption, String musicTitle, String profileImageUrl, int likeCount, int commentCount, int bookmarkCount, int shareCount, bool isLiked, bool isBookmarked
 });
 
 
@@ -286,7 +288,7 @@ class __$VideoModelCopyWithImpl<$Res>
 
 /// Create a copy of VideoModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? videoUrl = null,Object? thumbnailUrl = null,Object? username = null,Object? caption = null,Object? musicTitle = null,Object? profileImageUrl = null,Object? likeCount = null,Object? commentCount = null,Object? bookmarkCount = null,Object? shareCount = null,Object? isLiked = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? videoUrl = null,Object? thumbnailUrl = null,Object? username = null,Object? caption = null,Object? musicTitle = null,Object? profileImageUrl = null,Object? likeCount = null,Object? commentCount = null,Object? bookmarkCount = null,Object? shareCount = null,Object? isLiked = null,Object? isBookmarked = null,}) {
   return _then(_VideoModel(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,videoUrl: null == videoUrl ? _self.videoUrl : videoUrl // ignore: cast_nullable_to_non_nullable
@@ -300,6 +302,7 @@ as int,commentCount: null == commentCount ? _self.commentCount : commentCount //
 as int,bookmarkCount: null == bookmarkCount ? _self.bookmarkCount : bookmarkCount // ignore: cast_nullable_to_non_nullable
 as int,shareCount: null == shareCount ? _self.shareCount : shareCount // ignore: cast_nullable_to_non_nullable
 as int,isLiked: null == isLiked ? _self.isLiked : isLiked // ignore: cast_nullable_to_non_nullable
+as bool,isBookmarked: null == isBookmarked ? _self.isBookmarked : isBookmarked // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }

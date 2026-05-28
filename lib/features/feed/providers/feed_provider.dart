@@ -42,6 +42,9 @@ class FeedNotifier extends AsyncNotifier<List<VideoModel>> {
   /// 더블탭에서의 좋아요(취소하지 않음).
   void like(int index) => _mutate(index, (v) => v.liked());
 
+  /// 북마크 토글.
+  void toggleBookmark(int index) => _mutate(index, (v) => v.toggleBookmark());
+
   void _mutate(int index, VideoModel Function(VideoModel) transform) {
     final current = state.value;
     if (current == null || index < 0 || index >= current.length) return;

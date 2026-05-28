@@ -22,6 +22,7 @@ abstract class VideoModel with _$VideoModel {
     required int bookmarkCount,
     required int shareCount,
     @Default(false) bool isLiked,
+    @Default(false) bool isBookmarked,
   }) = _VideoModel;
 
   factory VideoModel.fromJson(Map<String, dynamic> json) =>
@@ -36,4 +37,10 @@ abstract class VideoModel with _$VideoModel {
   /// 좋아요 상태로 만든 복사본을 반환한다(멱등 — 취소 없는 더블탭용).
   VideoModel liked() =>
       isLiked ? this : copyWith(isLiked: true, likeCount: likeCount + 1);
+
+  /// [isBookmarked]를 토글하고 [bookmarkCount]를 그에 맞게 조정한 복사본을 반환한다.
+  VideoModel toggleBookmark() => copyWith(
+        isBookmarked: !isBookmarked,
+        bookmarkCount: isBookmarked ? bookmarkCount - 1 : bookmarkCount + 1,
+      );
 }

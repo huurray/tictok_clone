@@ -11,6 +11,7 @@ UI 일관성을 위한 단일 디자인 소스. 모든 토큰은 `lib/core/theme
 | `textSecondary` | `white70` | 보조 텍스트/카운트 |
 | `brandRed` | `#FE2C55` | 좋아요 활성, 강조 (TikTok red) |
 | `brandCyan` | `#25F4EE` | 보조 액센트 |
+| `bookmark` | `#FACC15` | 북마크(저장) 활성 (amber) |
 | `divider` | `white24` | 구분선 |
 
 - 영상 위 텍스트/아이콘은 가독성을 위해 항상 `shadow: black54`(blur 4, offset 0,1)를 동반.
@@ -31,11 +32,12 @@ UI 일관성을 위한 단일 디자인 소스. 모든 토큰은 `lib/core/theme
 - 하단 정보: SafeArea 기준 좌하단, 우측은 액션바 폭만큼 여백
 
 ## 4. Components
-- **SideActionBar** (우측 세로, 하단 정렬): `아바타(+팔로우 + 배지)` → `♥ Like(+count)` → `💬 Comment(+count)` → `↗ Share(+count)` → `회전 음악 디스크`.
+- **SideActionBar** (우측 세로, 하단 정렬): `아바타(+팔로우 + 배지)` → `♥ Like(+count)` → `💬 Comment(+count)` → `🔖 Bookmark(+count)` → `↗ Share(+count)` → `회전 음악 디스크`. 좋아요·북마크는 토글 + 스케일 팝(활성: Like=brandRed, Bookmark=amber).
 - **BottomInfo** (좌하단): `@username`(w700) + `caption`(2줄) + `♪ 음악` 한 줄. 뒤에 그라데이션 scrim.
 - **LikeButton**: 토글 시 `AnimatedScale`(1.0→1.3→1.0, 200ms). 비활성 흰색, 활성 `brandRed` 채움 하트.
 - **DoubleTapHeart**: 탭 좌표에 큰 하트(size ~100, `brandRed`) 버스트 — scale 0→1.2 + fade out, 약 600ms 후 제거. 더블탭은 "좋아요 설정"만(취소 없음).
 - **Buffering**: `!isInitialized || isBuffering`일 때 중앙 흰색 `CircularProgressIndicator`.
+- **LoadingPoster**: 컨트롤러 init 전(캐시 다운로드 중)에는 `thumbnailUrl` 정지컷을 `BoxFit.cover` 포스터로 깔고 그 위에 스피너 — 첫 시청/다운로드 지연을 시각적으로 가린다.
 - **PlayIndicator**: 사용자가 일시정지 시 중앙에 반투명 흰색 `play_arrow`(size ~80).
 
 ## 5. Layout 원칙
