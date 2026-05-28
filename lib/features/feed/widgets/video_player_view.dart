@@ -36,7 +36,8 @@ class VideoPlayerView extends ConsumerWidget {
         return ValueListenableBuilder<VideoPlayerValue>(
           valueListenable: controller,
           builder: (context, value, _) {
-            final showPlayIcon = manager.currentIndex == index &&
+            final showPlayIcon =
+                manager.currentIndex == index &&
                 value.isInitialized &&
                 !value.isPlaying &&
                 !value.isBuffering;

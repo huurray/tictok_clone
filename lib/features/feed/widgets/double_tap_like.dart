@@ -25,12 +25,13 @@ class _DoubleTapHeartState extends State<DoubleTapHeart>
     curve: const Interval(0.0, 0.5, curve: Curves.elasticOut),
   );
 
-  late final Animation<double> _opacity = Tween<double>(begin: 1, end: 0).animate(
-    CurvedAnimation(
-      parent: _controller,
-      curve: const Interval(0.6, 1.0, curve: Curves.easeIn),
-    ),
-  );
+  late final Animation<double> _opacity = Tween<double>(begin: 1, end: 0)
+      .animate(
+        CurvedAnimation(
+          parent: _controller,
+          curve: const Interval(0.6, 1.0, curve: Curves.easeIn),
+        ),
+      );
 
   @override
   void initState() {
