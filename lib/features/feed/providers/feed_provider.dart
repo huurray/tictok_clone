@@ -4,7 +4,7 @@ import 'package:tiktok/data/models/video_model.dart';
 import 'package:tiktok/data/repositories/video_repository.dart';
 
 final videoRepositoryProvider = Provider<VideoRepository>(
-  (ref) => const VideoRepository(),
+  (ref) => VideoRepository(),
 );
 
 /// (점점 늘어나는) 피드 항목 목록을 보관하고, 무한 스크롤 로딩과

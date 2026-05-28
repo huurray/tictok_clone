@@ -6,7 +6,7 @@ import 'package:tiktok/features/feed/providers/feed_provider.dart';
 
 /// 네트워크 지연 없이 notifier 로직을 테스트하기 위한 즉시·결정론적 리포지토리.
 class _FakeRepo extends VideoRepository {
-  const _FakeRepo();
+  _FakeRepo();
 
   @override
   Future<List<VideoModel>> fetchPage(int page, {int pageSize = 5}) async {
@@ -15,12 +15,14 @@ class _FakeRepo extends VideoRepository {
       (i) => VideoModel(
         id: 'p${page}_$i',
         videoUrl: 'u',
+        thumbnailUrl: 't',
         username: '@u',
         caption: 'c',
         musicTitle: 'm',
-        avatarUrl: 'a',
+        profileImageUrl: 'a',
         likeCount: 100,
         commentCount: 0,
+        bookmarkCount: 0,
         shareCount: 0,
       ),
     );
@@ -29,7 +31,7 @@ class _FakeRepo extends VideoRepository {
 
 ProviderContainer _makeContainer() => ProviderContainer(
       overrides: [
-        videoRepositoryProvider.overrideWith((ref) => const _FakeRepo()),
+        videoRepositoryProvider.overrideWith((ref) => _FakeRepo()),
       ],
     );
 

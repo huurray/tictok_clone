@@ -67,3 +67,11 @@
 - **결정:** **공식 gen-l10n 유지.**
 - **이유:** 이미 타입 세이프 + 영속화 + Riverpod 전환까지 안정적으로 동작 중. 과제 평가(구조·품질) 관점에서 "오타를 컴파일 단계에서 잡는" 타입 안전이 분명한 이점이고 공식 스택이 더 설득력 있음. easy_localization의 간결함은 매력적이나 지금 바꾸는 실익(타입 안전 포기 + 마이그레이션 비용)이 작다고 판단.
 - **용어 메모:** i18n=internationalization(다국어 지원 *인프라*), l10n=localization(언어별 *번역/적용*). 숫자는 첫·끝 사이 글자 수 — i+18+n, l+10+n (그래서 `i10n`은 틀린 표기).
+
+## 2026-05-28 — VideoModel을 freezed + json_serializable로 전환 (모델 계층 한정)
+- **맥락:** mock 데이터를 코드 하드코딩에서 `assets/mock/videos.json`으로 분리해 `rootBundle`로 읽도록 변경. 모델에 `fromJson`이 필요해지고, 손으로 쓰던 `copyWith`/`==`/`hashCode` 보일러플레이트가 늘어남.
+- **대안:** (a) 수기 보일러플레이트 유지 (b) 모델만 freezed+json_serializable 코드젠 (c) provider까지 riverpod_generator 전면 코드젠.
+- **결정:** **(b) 모델 계층만** freezed + json_serializable 도입. `fromJson`/`copyWith`/동등성 생성, 도메인 메서드(`toggleLike`/`liked`)는 `const VideoModel._()` private 생성자 + 본문 메서드로 유지. provider는 plain Notifier 유지(riverpod_generator 미도입).
+- **이유:** 데이터 모델은 필드가 많고 직렬화·동등성·copyWith가 반복돼 코드젠 이득이 크다. 반면 provider는 로직이 가볍고 코드젠을 넣으면 build_runner 의존성·생성 파일만 늘어 가독성이 떨어진다. **"코드젠은 보일러플레이트가 실제로 큰 데이터 모델에만 쓴다"**는 원칙에 따라 범위를 모델로 한정.
+- **데이터/리포지토리:** mixkit 공개 영상 10개로 교체(전부 reachable 검증). 필드 추가(`thumbnailUrl`, `bookmarkCount`), `avatarUrl`→`profileImageUrl`. `VideoRepository`는 JSON 풀을 한 번 로드·메모이즈 후 순환시켜 무한 스크롤을 시뮬레이션.
+- **검증:** build_runner 생성 성공, analyze 0 / 테스트 13 통과, 시뮬레이터에서 JSON 기반 첫 영상(golden_hour) 재생 확인.

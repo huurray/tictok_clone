@@ -22,7 +22,7 @@ class SideActionBar extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        _Avatar(url: video.avatarUrl),
+        _Avatar(url: video.profileImageUrl),
         const SizedBox(height: AppGaps.actionItemGap),
         LikeButton(
           isLiked: video.isLiked,
@@ -34,7 +34,7 @@ class SideActionBar extends StatelessWidget {
         const SizedBox(height: AppGaps.actionItemGap),
         _ActionItem(icon: Icons.share, count: video.shareCount),
         const SizedBox(height: AppGaps.actionItemGap),
-        _MusicDisc(url: video.avatarUrl),
+        _MusicDisc(url: video.profileImageUrl),
       ],
     );
   }

@@ -1,98 +1,39 @@
-import 'package:flutter/foundation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-/// 피드 한 항목. 불변이며, 좋아요 상태는 [copyWith]로 갱신한다.
-@immutable
-class VideoModel {
-  final String id;
-  final String videoUrl;
-  final String username;
-  final String caption;
-  final String musicTitle;
-  final String avatarUrl;
-  final int likeCount;
-  final int commentCount;
-  final int shareCount;
-  final bool isLiked;
+part 'video_model.freezed.dart';
+part 'video_model.g.dart';
 
-  const VideoModel({
-    required this.id,
-    required this.videoUrl,
-    required this.username,
-    required this.caption,
-    required this.musicTitle,
-    required this.avatarUrl,
-    required this.likeCount,
-    required this.commentCount,
-    required this.shareCount,
-    this.isLiked = false,
-  });
+/// 피드 한 항목. freezed가 불변성·동등성·copyWith·JSON 직렬화를 생성하고,
+/// 좋아요 토글 같은 도메인 메서드는 private 생성자(`VideoModel._`) + 본문 메서드로 유지한다.
+@freezed
+abstract class VideoModel with _$VideoModel {
+  const VideoModel._();
 
-  VideoModel copyWith({
-    String? id,
-    String? videoUrl,
-    String? username,
-    String? caption,
-    String? musicTitle,
-    String? avatarUrl,
-    int? likeCount,
-    int? commentCount,
-    int? shareCount,
-    bool? isLiked,
-  }) {
-    return VideoModel(
-      id: id ?? this.id,
-      videoUrl: videoUrl ?? this.videoUrl,
-      username: username ?? this.username,
-      caption: caption ?? this.caption,
-      musicTitle: musicTitle ?? this.musicTitle,
-      avatarUrl: avatarUrl ?? this.avatarUrl,
-      likeCount: likeCount ?? this.likeCount,
-      commentCount: commentCount ?? this.commentCount,
-      shareCount: shareCount ?? this.shareCount,
-      isLiked: isLiked ?? this.isLiked,
-    );
-  }
+  const factory VideoModel({
+    required String id,
+    required String videoUrl,
+    required String thumbnailUrl,
+    required String username,
+    required String caption,
+    required String musicTitle,
+    required String profileImageUrl,
+    required int likeCount,
+    required int commentCount,
+    required int bookmarkCount,
+    required int shareCount,
+    @Default(false) bool isLiked,
+  }) = _VideoModel;
+
+  factory VideoModel.fromJson(Map<String, dynamic> json) =>
+      _$VideoModelFromJson(json);
 
   /// [isLiked]를 토글하고 [likeCount]를 그에 맞게 조정한 복사본을 반환한다.
-  VideoModel toggleLike() {
-    return copyWith(
-      isLiked: !isLiked,
-      likeCount: isLiked ? likeCount - 1 : likeCount + 1,
-    );
-  }
+  VideoModel toggleLike() => copyWith(
+        isLiked: !isLiked,
+        likeCount: isLiked ? likeCount - 1 : likeCount + 1,
+      );
 
   /// 좋아요 상태로 만든 복사본을 반환한다(멱등 — 취소 없는 더블탭용).
-  VideoModel liked() {
-    if (isLiked) return this;
-    return copyWith(isLiked: true, likeCount: likeCount + 1);
-  }
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is VideoModel &&
-          other.id == id &&
-          other.videoUrl == videoUrl &&
-          other.username == username &&
-          other.caption == caption &&
-          other.musicTitle == musicTitle &&
-          other.avatarUrl == avatarUrl &&
-          other.likeCount == likeCount &&
-          other.commentCount == commentCount &&
-          other.shareCount == shareCount &&
-          other.isLiked == isLiked;
-
-  @override
-  int get hashCode => Object.hash(
-        id,
-        videoUrl,
-        username,
-        caption,
-        musicTitle,
-        avatarUrl,
-        likeCount,
-        commentCount,
-        shareCount,
-        isLiked,
-      );
+  VideoModel liked() =>
+      isLiked ? this : copyWith(isLiked: true, likeCount: likeCount + 1);
 }

@@ -4,12 +4,14 @@ import 'package:tiktok/data/models/video_model.dart';
 VideoModel _make({int likeCount = 10, bool isLiked = false}) => VideoModel(
       id: '1',
       videoUrl: 'u',
+      thumbnailUrl: 't',
       username: '@u',
       caption: 'c',
       musicTitle: 'm',
-      avatarUrl: 'a',
+      profileImageUrl: 'a',
       likeCount: likeCount,
       commentCount: 0,
+      bookmarkCount: 0,
       shareCount: 0,
       isLiked: isLiked,
     );
