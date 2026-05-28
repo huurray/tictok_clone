@@ -55,14 +55,18 @@ class VideoPlayerView extends ConsumerWidget {
                     ),
                   ),
                   if (value.isBuffering)
-                    const Center(child: CircularProgressIndicator()),
+                    const SafeArea(
+                      child: Center(child: CircularProgressIndicator()),
+                    ),
                   if (showPlayIcon)
-                    const Center(
-                      child: Icon(
-                        Icons.play_arrow_rounded,
-                        size: 84,
-                        color: Colors.white70,
-                        shadows: kOverlayTextShadows,
+                    const SafeArea(
+                      child: Center(
+                        child: Icon(
+                          Icons.play_arrow_rounded,
+                          size: 84,
+                          color: Colors.white70,
+                          shadows: kOverlayTextShadows,
+                        ),
                       ),
                     ),
                 ],
@@ -94,7 +98,7 @@ class _Poster extends StatelessWidget {
           placeholder: (_, _) => const ColoredBox(color: Colors.black),
           errorWidget: (_, _, _) => const ColoredBox(color: Colors.black),
         ),
-        const Center(child: CircularProgressIndicator()),
+        const SafeArea(child: Center(child: CircularProgressIndicator())),
       ],
     );
   }
