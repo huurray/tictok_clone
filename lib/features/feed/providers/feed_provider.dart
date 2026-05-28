@@ -1,14 +1,14 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../data/models/video_model.dart';
-import '../../../data/repositories/video_repository.dart';
+import 'package:tiktok/data/models/video_model.dart';
+import 'package:tiktok/data/repositories/video_repository.dart';
 
 final videoRepositoryProvider = Provider<VideoRepository>(
   (ref) => const VideoRepository(),
 );
 
-/// Holds the (growing) list of feed items and exposes infinite-scroll loading
-/// and like mutations.
+/// (점점 늘어나는) 피드 항목 목록을 보관하고, 무한 스크롤 로딩과
+/// 좋아요 변경을 제공한다.
 class FeedNotifier extends AsyncNotifier<List<VideoModel>> {
   int _nextPage = 0;
   bool _isLoadingMore = false;
@@ -20,7 +20,7 @@ class FeedNotifier extends AsyncNotifier<List<VideoModel>> {
     return first;
   }
 
-  /// Append the next page. Guarded so overlapping scroll events don't double-load.
+  /// 다음 페이지를 덧붙인다. 스크롤 이벤트가 겹쳐도 중복 로드되지 않도록 가드한다.
   Future<void> loadMore() async {
     if (_isLoadingMore) return;
     final current = state.value;
@@ -36,10 +36,10 @@ class FeedNotifier extends AsyncNotifier<List<VideoModel>> {
     }
   }
 
-  /// Toggle like from the like button.
+  /// 좋아요 버튼에서의 토글.
   void toggleLike(int index) => _mutate(index, (v) => v.toggleLike());
 
-  /// Like from a double-tap (never unlikes).
+  /// 더블탭에서의 좋아요(취소하지 않음).
   void like(int index) => _mutate(index, (v) => v.liked());
 
   void _mutate(int index, VideoModel Function(VideoModel) transform) {

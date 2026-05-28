@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/theme/app_theme.dart';
+import 'package:tiktok/core/theme/app_theme.dart';
 
-/// A single heart burst shown at the double-tap location: pops in with an
-/// elastic scale, holds, then fades out and calls [onCompleted] so the parent
-/// can remove it.
+/// 더블탭 위치에 나타나는 하트 버스트: 탄성 스케일로 팝업되어 잠깐 머문 뒤
+/// 페이드아웃되고, [onCompleted]를 호출해 부모가 제거할 수 있게 한다.
 class DoubleTapHeart extends StatefulWidget {
   final VoidCallback onCompleted;
 

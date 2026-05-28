@@ -1,11 +1,10 @@
-import '../models/video_model.dart';
+import 'package:tiktok/data/models/video_model.dart';
 
-/// Base pool of feed items backed by public, royalty-free H.264 MP4s from
-/// stable hosts (flutter.github.io, w3schools.com, test-videos.co.uk,
-/// media.w3.org). All verified reachable and small enough to stream smoothly
-/// on the iOS simulator. Source clips are landscape; the player uses
-/// `BoxFit.cover` to fill the portrait screen. The repository cycles this pool
-/// to simulate an endless feed.
+/// 공개·로열티프리 H.264 MP4를 사용하는 피드 기본 풀. 안정적인 호스트
+/// (flutter.github.io, w3schools.com, test-videos.co.uk, media.w3.org)에서
+/// 가져오며, 모두 접근 가능하고 iOS 시뮬레이터에서 무리 없이 재생될 만큼 가볍다.
+/// 원본은 가로 영상이라 플레이어가 `BoxFit.cover`로 세로 화면을 채운다.
+/// 리포지토리가 이 풀을 순환시켜 끝없는 피드를 시뮬레이션한다.
 const List<VideoModel> mockVideos = [
   VideoModel(
     id: 'butterfly',

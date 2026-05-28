@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/theme/app_theme.dart';
-import '../../../core/utils/number_format.dart';
+import 'package:tiktok/core/theme/app_theme.dart';
+import 'package:tiktok/core/utils/number_format.dart';
 
-/// Heart icon + count. Pops with a scale bounce whenever it transitions to
-/// liked — whether from a direct tap or an external double-tap like.
+/// 하트 아이콘 + 카운트. 좋아요 상태로 바뀔 때 스케일 바운스로 팝 한다 —
+/// 직접 탭이든 외부 더블탭 좋아요든 동일하게.
 class LikeButton extends StatefulWidget {
   final bool isLiked;
   final int likeCount;

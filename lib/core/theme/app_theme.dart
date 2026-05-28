@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-/// Design tokens — single source mirrored from DESIGN.md.
-/// Widgets must reference these instead of hardcoding values.
+/// 디자인 토큰 — DESIGN.md를 그대로 옮긴 단일 소스.
+/// 위젯은 값을 하드코딩하지 말고 반드시 이 토큰을 참조한다.
 class AppColors {
   AppColors._();
 
@@ -14,7 +14,7 @@ class AppColors {
   static const Color divider = Colors.white24;
 }
 
-/// Soft shadow applied to text/icons rendered over video for legibility.
+/// 영상 위에 올라가는 텍스트/아이콘의 가독성을 위한 부드러운 그림자.
 const List<Shadow> kOverlayTextShadows = [
   Shadow(color: Colors.black54, blurRadius: 4, offset: Offset(0, 1)),
 ];
@@ -52,7 +52,7 @@ class AppTextStyles {
   );
 }
 
-/// Spacing scale from DESIGN.md.
+/// DESIGN.md의 스페이싱 스케일.
 class AppGaps {
   AppGaps._();
 

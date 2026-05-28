@@ -4,8 +4,7 @@ import 'package:tiktok/data/models/video_model.dart';
 import 'package:tiktok/data/repositories/video_repository.dart';
 import 'package:tiktok/features/feed/providers/feed_provider.dart';
 
-/// Instant, deterministic repository so the notifier logic can be tested
-/// without network latency.
+/// 네트워크 지연 없이 notifier 로직을 테스트하기 위한 즉시·결정론적 리포지토리.
 class _FakeRepo extends VideoRepository {
   const _FakeRepo();
 

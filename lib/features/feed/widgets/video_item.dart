@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../data/models/video_model.dart';
-import '../providers/feed_provider.dart';
-import '../providers/video_manager.dart';
-import 'double_tap_like.dart';
-import 'video_overlay.dart';
-import 'video_player_view.dart';
+import 'package:tiktok/data/models/video_model.dart';
+import 'package:tiktok/features/feed/providers/feed_provider.dart';
+import 'package:tiktok/features/feed/providers/video_manager.dart';
+import 'package:tiktok/features/feed/widgets/double_tap_like.dart';
+import 'package:tiktok/features/feed/widgets/video_overlay.dart';
+import 'package:tiktok/features/feed/widgets/video_player_view.dart';
 
-/// One full-screen feed page: video + tap-to-pause/double-tap-like gestures +
-/// overlay UI + the transient double-tap heart.
+/// 전체 화면 피드 한 페이지: 영상 + 탭(일시정지)/더블탭(좋아요) 제스처 +
+/// 오버레이 UI + 잠깐 나타나는 더블탭 하트.
 class VideoItem extends ConsumerStatefulWidget {
   final int index;
   final VideoModel video;

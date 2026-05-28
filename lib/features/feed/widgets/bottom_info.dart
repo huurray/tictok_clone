@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/theme/app_theme.dart';
-import '../../../data/models/video_model.dart';
+import 'package:tiktok/core/theme/app_theme.dart';
+import 'package:tiktok/data/models/video_model.dart';
 
-/// Bottom-left overlay: username, caption, and the music row.
+/// 좌하단 오버레이: username, caption, 음악 행.
 class BottomInfo extends StatelessWidget {
   final VideoModel video;
 

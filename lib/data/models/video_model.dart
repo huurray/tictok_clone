@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 
-/// A single feed item. Immutable; like state is updated via [copyWith].
+/// 피드 한 항목. 불변이며, 좋아요 상태는 [copyWith]로 갱신한다.
 @immutable
 class VideoModel {
   final String id;
@@ -53,7 +53,7 @@ class VideoModel {
     );
   }
 
-  /// Returns a copy with [isLiked] toggled and [likeCount] adjusted accordingly.
+  /// [isLiked]를 토글하고 [likeCount]를 그에 맞게 조정한 복사본을 반환한다.
   VideoModel toggleLike() {
     return copyWith(
       isLiked: !isLiked,
@@ -61,7 +61,7 @@ class VideoModel {
     );
   }
 
-  /// Returns a copy liked (idempotent — used by double-tap, which never unlikes).
+  /// 좋아요 상태로 만든 복사본을 반환한다(멱등 — 취소 없는 더블탭용).
   VideoModel liked() {
     if (isLiked) return this;
     return copyWith(isLiked: true, likeCount: likeCount + 1);

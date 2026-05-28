@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../data/models/video_model.dart';
-import '../providers/feed_provider.dart';
-import 'bottom_info.dart';
-import 'side_action_bar.dart';
+import 'package:tiktok/data/models/video_model.dart';
+import 'package:tiktok/features/feed/providers/feed_provider.dart';
+import 'package:tiktok/features/feed/widgets/bottom_info.dart';
+import 'package:tiktok/features/feed/widgets/side_action_bar.dart';
 
-/// The non-video layer: bottom gradient scrim, bottom-left info, right actions.
-/// The scrim and info are wrapped in [IgnorePointer] so taps fall through to
-/// the play/pause + double-tap gesture layer below; only the action bar is
-/// interactive.
+/// 영상이 아닌 레이어: 하단 그라데이션 scrim, 좌하단 정보, 우측 액션.
+/// scrim과 정보는 [IgnorePointer]로 감싸 탭이 아래의 재생/일시정지 + 더블탭
+/// 제스처 레이어로 통과하게 하고, 액션바만 상호작용한다.
 class VideoOverlay extends ConsumerWidget {
   final VideoModel video;
   final int index;

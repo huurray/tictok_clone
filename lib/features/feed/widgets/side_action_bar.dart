@@ -1,12 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-import '../../../core/theme/app_theme.dart';
-import '../../../core/utils/number_format.dart';
-import '../../../data/models/video_model.dart';
-import 'like_button.dart';
+import 'package:tiktok/core/theme/app_theme.dart';
+import 'package:tiktok/core/utils/number_format.dart';
+import 'package:tiktok/data/models/video_model.dart';
+import 'package:tiktok/features/feed/widgets/like_button.dart';
 
-/// Right-side vertical action column: avatar, like, comment, share, music disc.
+/// 우측 세로 액션 컬럼: 아바타, 좋아요, 댓글, 공유, 음악 디스크.
 class SideActionBar extends StatelessWidget {
   final VideoModel video;
   final VoidCallback onLikeTap;
@@ -114,7 +114,7 @@ class _Avatar extends StatelessWidget {
   }
 }
 
-/// Spinning vinyl-style disc with the album (avatar) art in the center.
+/// 가운데에 앨범(아바타) 아트가 들어간, 회전하는 LP 스타일 디스크.
 class _MusicDisc extends StatefulWidget {
   final String url;
 

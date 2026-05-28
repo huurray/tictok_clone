@@ -1,5 +1,5 @@
-/// Formats large counts the way short-video apps do: 1234 -> "1.2K",
-/// 1_200_000 -> "1.2M". Trailing ".0" is dropped (2000 -> "2K").
+/// 숏폼 앱처럼 큰 수를 축약해 표기한다: 1234 -> "1.2K",
+/// 1_200_000 -> "1.2M". 끝의 ".0"은 생략한다 (2000 -> "2K").
 String formatCount(int count) {
   if (count < 0) return '0';
   if (count < 1000) return '$count';
