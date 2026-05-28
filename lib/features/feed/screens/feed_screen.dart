@@ -66,7 +66,8 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
     return Scaffold(
       backgroundColor: Colors.black,
       body: feed.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
+        loading: () =>
+            const SafeArea(child: Center(child: CircularProgressIndicator())),
         error: (_, _) =>
             _ErrorView(onRetry: () => ref.invalidate(feedProvider)),
         data: (videos) {
