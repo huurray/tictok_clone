@@ -12,7 +12,7 @@
 
 ## 데모 영상
 
-▶️ _(여기에 1~2분 실행 영상 링크 추가 — vertical scroll / video playback / UI interaction 확인용)_
+▶️ **[데모 영상 (docs/demo.mp4)](docs/demo.mp4)** — 세로 스크롤, 영상 자동재생/일시정지, 좋아요·더블탭·북마크, 무한 스크롤, 언어 전환을 확인할 수 있습니다. (GitHub에서 클릭하면 재생)
 
 ---
 
