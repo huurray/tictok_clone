@@ -89,3 +89,14 @@
 - **결정:** (b). thumbnailUrl은 컨트롤러 init 전 `BoxFit.cover` 포스터로(스피너 위 정지컷) 깔아 캐시 다운로드 지연을 시각적으로 가림. bookmarkCount는 사이드바에 북마크(저장) 토글 추가 — like 패턴 재사용(`BookmarkButton`, 활성색 amber). 모델에 `isBookmarked`(@Default false) + `toggleBookmark` 추가.
 - **이유:** thumbnailUrl 포스터는 거의 공짜로 "죽은 필드 살리기 + 첫 시청 지연 완화"를 동시에 해결(디스크 캐시의 유일한 약점인 첫 다운로드 지연을 보완). 북마크는 TikTok 실제 기능이라 authentic하고 사이드바 완성도↑. 둘 다 살리는 쪽이 제거보다 데모/완성도에 유리.
 - **검증:** 시뮬레이터에서 북마크 아이콘+카운트(678) 렌더, 포스터 동작, analyze 0 / 테스트 15(북마크 2개 추가) 통과.
+
+## 2026-05-28 — 폴리시: 토글 버튼 DRY + 빠른 스와이프 가드 + 테스트 파리티
+- **토글 버튼 통합:** LikeButton·BookmarkButton이 토글+스케일 팝 로직이 거의 동일 → `ToggleActionButton`(activeIcon/inactiveIcon/activeColor) 하나로 합침. 좋아요=하트(brandRed), 북마크=북마크(amber) 주입. 중복 제거.
+- **빠른 스와이프 가드:** `setActive`에서 `await _ensure` 직후 그 사이 더 새로운 스와이프가 오면(`_currentIndex != index`) 중단 → stale 이웃 프리로드(불필요한 부분 다운로드) 방지. (누수는 기존 `_inWindow` 가드로 이미 없었음 — 이건 효율 개선.)
+- **테스트:** feed_provider에 `toggleBookmark` 테스트 추가(`toggleLike`와 파리티). 총 16개.
+
+## 2026-05-28 — 버그: 시작 시 간헐적 영상 정지 (transient lifecycle)
+- **증상:** 콜드 스타트 일부에서 첫 영상이 재생되지 않고 ▶ 정지 상태로 시작(간헐적, 재현 어려움 — 초기 스샷에서도 한 번 목격).
+- **원인:** iOS 앱 시작은 inactive→active를 거치는데, lifecycle 핸들러가 `resumed`가 아니면 전부 `onAppPaused`로 처리하고 있었음. 시작 중 `inactive`가 `_ensure`의 비동기(getSingleFile/initialize) 도중 끼어들면 `_appPaused=true`가 되고, 그 상태로 `_playActive`가 호출돼 재생이 막힘. 타이밍 의존이라 간헐적.
+- **해결:** `inactive`/`detached`(일시적·전환 상태)는 무시하고, 실제 백그라운드(`paused`/`hidden`)에서만 `onAppPaused`. 제어센터·앱 전환 미리보기 등에도 불필요하게 멈추지 않아 동작이 더 정확해짐.
+- **검증:** 3회 연속 콜드 스타트 모두 첫 영상 자동재생 확인(이전엔 간헐적 정지).

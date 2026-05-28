@@ -3,25 +3,31 @@ import 'package:flutter/material.dart';
 import 'package:tiktok/core/theme/app_theme.dart';
 import 'package:tiktok/core/utils/number_format.dart';
 
-/// 북마크(저장) 아이콘 + 카운트. 저장 상태로 바뀔 때 스케일 바운스로 팝 한다.
-/// LikeButton과 동일한 토글 패턴.
-class BookmarkButton extends StatefulWidget {
-  final bool isBookmarked;
-  final int bookmarkCount;
+/// 토글 액션(좋아요·북마크 등) 공통 버튼: 아이콘 + 카운트.
+/// 비활성→활성으로 바뀔 때 스케일 바운스로 팝 한다(직접 탭이든 외부 트리거든 동일).
+class ToggleActionButton extends StatefulWidget {
+  final bool isActive;
+  final int count;
+  final IconData activeIcon;
+  final IconData inactiveIcon;
+  final Color activeColor;
   final VoidCallback onTap;
 
-  const BookmarkButton({
+  const ToggleActionButton({
     super.key,
-    required this.isBookmarked,
-    required this.bookmarkCount,
+    required this.isActive,
+    required this.count,
+    required this.activeIcon,
+    required this.inactiveIcon,
+    required this.activeColor,
     required this.onTap,
   });
 
   @override
-  State<BookmarkButton> createState() => _BookmarkButtonState();
+  State<ToggleActionButton> createState() => _ToggleActionButtonState();
 }
 
-class _BookmarkButtonState extends State<BookmarkButton>
+class _ToggleActionButtonState extends State<ToggleActionButton>
     with SingleTickerProviderStateMixin {
   late final AnimationController _controller = AnimationController(
     vsync: this,
@@ -40,9 +46,9 @@ class _BookmarkButtonState extends State<BookmarkButton>
   ]).animate(_controller);
 
   @override
-  void didUpdateWidget(covariant BookmarkButton oldWidget) {
+  void didUpdateWidget(covariant ToggleActionButton oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (!oldWidget.isBookmarked && widget.isBookmarked) {
+    if (!oldWidget.isActive && widget.isActive) {
       _controller.forward(from: 0);
     }
   }
@@ -64,14 +70,14 @@ class _BookmarkButtonState extends State<BookmarkButton>
           ScaleTransition(
             scale: _scale,
             child: Icon(
-              widget.isBookmarked ? Icons.bookmark : Icons.bookmark_border,
+              widget.isActive ? widget.activeIcon : widget.inactiveIcon,
               size: AppGaps.actionIconSize,
-              color: widget.isBookmarked ? AppColors.bookmark : Colors.white,
+              color: widget.isActive ? widget.activeColor : Colors.white,
               shadows: kOverlayTextShadows,
             ),
           ),
           const SizedBox(height: 4),
-          Text(formatCount(widget.bookmarkCount), style: AppTextStyles.actionCount),
+          Text(formatCount(widget.count), style: AppTextStyles.actionCount),
         ],
       ),
     );

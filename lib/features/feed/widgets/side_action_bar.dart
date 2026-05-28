@@ -4,8 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:tiktok/core/theme/app_theme.dart';
 import 'package:tiktok/core/utils/number_format.dart';
 import 'package:tiktok/data/models/video_model.dart';
-import 'package:tiktok/features/feed/widgets/bookmark_button.dart';
-import 'package:tiktok/features/feed/widgets/like_button.dart';
+import 'package:tiktok/features/feed/widgets/toggle_action_button.dart';
 
 /// 우측 세로 액션 컬럼: 아바타, 좋아요, 댓글, 공유, 음악 디스크.
 class SideActionBar extends StatelessWidget {
@@ -27,17 +26,23 @@ class SideActionBar extends StatelessWidget {
       children: [
         _Avatar(url: video.profileImageUrl),
         const SizedBox(height: AppGaps.actionItemGap),
-        LikeButton(
-          isLiked: video.isLiked,
-          likeCount: video.likeCount,
+        ToggleActionButton(
+          isActive: video.isLiked,
+          count: video.likeCount,
+          activeIcon: Icons.favorite,
+          inactiveIcon: Icons.favorite,
+          activeColor: AppColors.brandRed,
           onTap: onLikeTap,
         ),
         const SizedBox(height: AppGaps.actionItemGap),
         _ActionItem(icon: Icons.mode_comment, count: video.commentCount),
         const SizedBox(height: AppGaps.actionItemGap),
-        BookmarkButton(
-          isBookmarked: video.isBookmarked,
-          bookmarkCount: video.bookmarkCount,
+        ToggleActionButton(
+          isActive: video.isBookmarked,
+          count: video.bookmarkCount,
+          activeIcon: Icons.bookmark,
+          inactiveIcon: Icons.bookmark_border,
+          activeColor: AppColors.bookmark,
           onTap: onBookmarkTap,
         ),
         const SizedBox(height: AppGaps.actionItemGap),

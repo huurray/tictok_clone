@@ -50,6 +50,8 @@ class VideoManager extends ChangeNotifier {
     _pauseAllExcept(index);
     _disposeOutsideWindow();
     await _ensure(index); // 현재 컨트롤러 준비(이미 있으면 즉시 반환)
+    // await 사이 더 새로운 스와이프가 왔으면 중단(stale 이웃 프리로드 방지).
+    if (_currentIndex != index) return;
     _playActive(index); // 새로 만들었든 미리 로드돼 있었든 활성 영상을 즉시 재생
     for (final i in _windowIndices(index)) {
       if (i != index) unawaited(_ensure(i)); // 이웃 프리로드 (await 안 함)

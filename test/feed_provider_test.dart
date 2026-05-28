@@ -78,4 +78,16 @@ void main() {
     expect(item.isLiked, true);
     expect(item.likeCount, 101);
   });
+
+  test('toggleBookmark flips bookmark state and adjusts the count', () async {
+    final container = _makeContainer();
+    addTearDown(container.dispose);
+
+    await container.read(feedProvider.future);
+    container.read(feedProvider.notifier).toggleBookmark(0);
+
+    final item = container.read(feedProvider).value![0];
+    expect(item.isBookmarked, true);
+    expect(item.bookmarkCount, 1);
+  });
 }
