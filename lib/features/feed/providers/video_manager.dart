@@ -4,18 +4,16 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:video_player/video_player.dart';
 
-import '../../../core/constants/app_constants.dart';
-import '../../../data/models/video_model.dart';
-import 'feed_provider.dart';
+import 'package:tiktok/core/constants/app_constants.dart';
+import 'package:tiktok/data/models/video_model.dart';
+import 'package:tiktok/features/feed/providers/feed_provider.dart';
 
-/// Owns a sliding-window pool of [VideoPlayerController]s around the current
-/// page. Only `current ± AppConstants.preloadWindow` controllers are kept
-/// alive; everything else is paused, disposed, and dropped to free the limited
-/// native player resources.
+/// 현재 페이지 주변의 [VideoPlayerController]를 슬라이딩 윈도우 풀로 관리한다.
+/// `현재 ± AppConstants.preloadWindow` 범위의 컨트롤러만 살아있고, 나머지는
+/// pause·dispose 후 제거해 한정된 네이티브 플레이어 리소스를 확보한다.
 ///
-/// Notifies listeners whenever the set of available controllers changes so the
-/// feed widgets can rebind. Per-frame values (buffering/position) are observed
-/// directly on each controller (which is itself a `ValueListenable`).
+/// 사용 가능한 컨트롤러 집합이 바뀌면 리스너에 알려 피드 위젯이 다시 바인딩되게 한다.
+/// 프레임 단위 값(버퍼링/재생 위치)은 컨트롤러 자체(`ValueListenable`)를 직접 구독한다.
 class VideoManager extends ChangeNotifier {
   VideoManager(this._ref);
 
@@ -25,8 +23,9 @@ class VideoManager extends ChangeNotifier {
   final Set<int> _errored = {};
 
   int _currentIndex = 0;
-  bool _userPaused = false; // user tapped to pause the current video
-  bool _appPaused = false; // app went to background
+  bool _userPaused = false; // 사용자가 현재 영상을 탭으로 일시정지함
+  bool _appPaused = false; // 앱이 백그라운드로 감
+  bool _feedVisible = true; // 피드(홈 탭)가 화면에 보이는지
 
   int get currentIndex => _currentIndex;
 
@@ -37,23 +36,24 @@ class VideoManager extends ChangeNotifier {
   List<VideoModel> get _videos =>
       _ref.read(feedProvider).value ?? const [];
 
-  // ---- Public API ---------------------------------------------------------
+  // ---- 공개 API ---------------------------------------------------------
 
-  /// Make [index] the active page: pause others, free out-of-window
-  /// controllers, ensure the window is initialized, and play the active one.
+  /// [index]를 활성 페이지로 만든다: 나머지는 pause, 윈도우 밖 컨트롤러는 해제,
+  /// 윈도우를 초기화한 뒤 활성 영상을 재생한다.
   Future<void> setActive(int index) async {
     _currentIndex = index;
     _userPaused = false;
     if (_videos.isEmpty) return;
     _pauseAllExcept(index);
     _disposeOutsideWindow();
-    await _ensure(index); // current first — plays inside if still current
+    await _ensure(index); // 현재 컨트롤러 준비(이미 있으면 즉시 반환)
+    _playActive(index); // 새로 만들었든 미리 로드돼 있었든 활성 영상을 즉시 재생
     for (final i in _windowIndices(index)) {
-      if (i != index) unawaited(_ensure(i)); // preload neighbors (no await)
+      if (i != index) unawaited(_ensure(i)); // 이웃 프리로드 (await 안 함)
     }
   }
 
-  /// Toggle play/pause on the current video (single-tap gesture).
+  /// 현재 영상의 재생/일시정지 토글 (단일 탭 제스처).
   void togglePlayPause() {
     final controller = _controllers[_currentIndex];
     if (controller == null || !controller.value.isInitialized) return;
@@ -75,24 +75,36 @@ class VideoManager extends ChangeNotifier {
 
   void onAppResumed() {
     _appPaused = false;
-    if (!_userPaused) _controllers[_currentIndex]?.play();
-    notifyListeners();
+    _playActive(_currentIndex);
   }
 
-  /// Pause everything (e.g. when the feed screen is left).
+  /// 홈 탭이 보이는지 설정한다. 다른 탭으로 가면 현재 영상을 멈추고,
+  /// 홈으로 돌아오면 다시 재생한다.
+  void setFeedVisible(bool visible) {
+    if (_feedVisible == visible) return;
+    _feedVisible = visible;
+    if (visible) {
+      _playActive(_currentIndex);
+    } else {
+      _controllers[_currentIndex]?.pause();
+      notifyListeners();
+    }
+  }
+
+  /// 모든 영상 일시정지 (예: 피드 화면을 벗어날 때).
   void pauseAll() {
     for (final c in _controllers.values) {
       if (c.value.isInitialized) c.pause();
     }
   }
 
-  /// Retry a controller that previously failed to initialize.
+  /// 이전에 초기화에 실패한 컨트롤러를 다시 시도한다.
   void retry(int index) {
     _errored.remove(index);
     unawaited(_ensure(index));
   }
 
-  // ---- Internals ----------------------------------------------------------
+  // ---- 내부 구현 ----------------------------------------------------------
 
   Iterable<int> _windowIndices(int index) sync* {
     final last = _videos.length - 1;
@@ -115,11 +127,11 @@ class VideoManager extends ChangeNotifier {
 
     final controller =
         VideoPlayerController.networkUrl(Uri.parse(videos[index].videoUrl));
-    _controllers[index] = controller; // register early so disposal can find it
+    _controllers[index] = controller; // dispose 로직이 찾을 수 있게 먼저 등록
 
     try {
       await controller.initialize();
-      // It may have scrolled out of the window while initializing.
+      // 초기화 도중 윈도우를 벗어났을 수 있다.
       if (!_inWindow(index)) {
         _controllers.remove(index);
         await controller.dispose();
@@ -128,16 +140,29 @@ class VideoManager extends ChangeNotifier {
       }
       await controller.setLooping(true);
       await controller.setVolume(1.0);
-      // Race guard: only play if this is still the active page.
-      if (index == _currentIndex && !_userPaused && !_appPaused) {
-        await controller.play();
-      }
+      // 늦게 끝난 초기화(또는 retry)라도 활성 페이지면 바로 재생한다.
+      _playActive(index);
       notifyListeners();
     } catch (e) {
       debugPrint('VideoManager: failed to init index $index: $e');
       _errored.add(index);
       _controllers.remove(index);
       await controller.dispose();
+      notifyListeners();
+    }
+  }
+
+  /// 활성 페이지의 컨트롤러를 재생한다(이미 재생 중이면 무시).
+  /// 레이스 가드: 호출 시점에도 여전히 활성 페이지일 때만 재생한다.
+  void _playActive(int index) {
+    if (index != _currentIndex || _userPaused || _appPaused || !_feedVisible) {
+      return;
+    }
+    final controller = _controllers[index];
+    if (controller != null &&
+        controller.value.isInitialized &&
+        !controller.value.isPlaying) {
+      controller.play();
       notifyListeners();
     }
   }
@@ -149,8 +174,8 @@ class VideoManager extends ChangeNotifier {
   }
 
   void _disposeOutsideWindow() {
-    // Dispose initialized controllers outside the window now; controllers still
-    // initializing are cleaned up by the post-init window check in [_ensure].
+    // 윈도우 밖의 '초기화된' 컨트롤러는 지금 dispose한다. 아직 초기화 중인 것은
+    // [_ensure]의 초기화 후 윈도우 검사에서 정리된다.
     final toRemove = _controllers.keys
         .where((i) => !_inWindow(i) && _controllers[i]!.value.isInitialized)
         .toList();
