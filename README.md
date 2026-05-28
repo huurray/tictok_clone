@@ -1,6 +1,6 @@
 # TikTok Clone (Flutter)
 
-슈퍼센트 **AI 네이티브 직무** 과제 — Flutter로 구현한 TikTok 스타일 숏폼 영상 피드 앱.
+슈퍼센트 **React Native AI 직무** 과제 — Flutter로 구현한 TikTok 스타일 숏폼 영상 피드 앱.
 
 세로 `PageView` 피드, 현재 영상 자동재생 / 화면 밖 자동 일시정지, 영상 위 오버레이 UI(좋아요·댓글·북마크·공유, username·caption·음악)를 갖추고, 가산점 항목(좋아요 토글·더블탭 좋아요·무한 스크롤·Riverpod 상태관리·확장형 구조)을 모두 포함합니다. 추가로 바텀 탭(홈/설정) + 한/영 언어 전환, 영상 디스크 캐시, 로딩 포스터를 구현했습니다.
 
@@ -47,16 +47,16 @@ flutter test               # 단위 테스트 (16개)
 
 ## 사용한 패키지
 
-| 패키지                | 용도                                                 |
-| --------------------- | ---------------------------------------------------- |
-| `flutter_riverpod`    | 상태관리 (Notifier / AsyncNotifier, DI)              |
-| `video_player`        | 영상 재생 (공식 플러그인)                            |
-| `flutter_cache_manager` | 영상 파일 디스크 캐시 (재방문 시 즉시 재생)        |
-| `cached_network_image` | 아바타·썸네일 이미지 캐싱                            |
-| `go_router`           | 선언형 라우팅 + 바텀 탭(StatefulShellRoute)          |
-| `flutter_localizations` + `intl` | 다국어(i18n) — gen-l10n(ARB) 기반          |
-| `shared_preferences`  | 선택 언어 영속화                                     |
-| `freezed` + `json_serializable` | 데이터 모델 코드 생성(불변/copyWith/fromJson) |
+| 패키지                           | 용도                                          |
+| -------------------------------- | --------------------------------------------- |
+| `flutter_riverpod`               | 상태관리 (Notifier / AsyncNotifier, DI)       |
+| `video_player`                   | 영상 재생 (공식 플러그인)                     |
+| `flutter_cache_manager`          | 영상 파일 디스크 캐시 (재방문 시 즉시 재생)   |
+| `cached_network_image`           | 아바타·썸네일 이미지 캐싱                     |
+| `go_router`                      | 선언형 라우팅 + 바텀 탭(StatefulShellRoute)   |
+| `flutter_localizations` + `intl` | 다국어(i18n) — gen-l10n(ARB) 기반             |
+| `shared_preferences`             | 선택 언어 영속화                              |
+| `freezed` + `json_serializable`  | 데이터 모델 코드 생성(불변/copyWith/fromJson) |
 
 dev: `build_runner`, `flutter_lints`
 
@@ -186,7 +186,7 @@ assets/mock/videos.json           # mock 피드 데이터
 - 초기화 도중 윈도우를 벗어났으면 완료 즉시 **`dispose`** (누수 방지).
 - **"준비(`_ensure`)"와 "활성 재생(`_playActive`)"의 책임을 분리** → 새로 만들었든 프리로드됐든 활성 영상은 항상 재생.
 
-> 추가로, 검증 중 발견한 *간헐적 시작 정지* 버그(시작 중 transient `inactive` 상태에 과도하게 일시정지가 걸리던 문제)도 lifecycle 처리를 `paused`/`hidden`에서만 멈추도록 고쳐 해결했습니다. 상세 맥락은 [`DEVLOG.md`](DEVLOG.md) 참고.
+> 추가로, 검증 중 발견한 _간헐적 시작 정지_ 버그(시작 중 transient `inactive` 상태에 과도하게 일시정지가 걸리던 문제)도 lifecycle 처리를 `paused`/`hidden`에서만 멈추도록 고쳐 해결했습니다. 상세 맥락은 [`DEVLOG.md`](DEVLOG.md) 참고.
 
 ---
 
@@ -194,7 +194,12 @@ assets/mock/videos.json           # mock 피드 데이터
 
 - **AI 사용 여부:** 사용함 — **Claude Code (Opus)** 를 페어 프로그래밍 에이전트로 사용.
 - **AI를 사용한 작업 범위:** 과제 요구사항 분석, 아키텍처·컨트롤러 생명주기 설계, 전체 코드 구현, 단위 테스트 작성, 공개 영상 URL 검증, 시뮬레이터 스크린샷 검증, 문서(README/DESIGN/DEVLOG/CLAUDE) 작성.
-- **본인이 직접 작성/결정한 부분:** 핵심 기술 의사결정(상태관리 = Riverpod, 비디오 라이브러리 = video_player, 데모 타깃 = iOS 시뮬레이터, i18n = 공식 gen-l10n, 코드젠 범위 = 모델 한정 등), 코드 리뷰 및 방향 조정, UI 디테일 피드백(플레이 아이콘/로딩 위치 등), 시뮬레이터 동작 검증, 데모 영상 촬영.
+- **본인이 직접 작성/결정한 부분:**
+  - 프로젝트 **폴더 구조 설계** — feature-first(`core`/`data`/`features`) 계층 분리 방향
+  - 핵심 **아키텍처 결정** — 비디오 컨트롤러 슬라이딩 윈도우 풀(±1) 전략, "데이터·오케스트레이션은 Riverpod / 프레임 단위 값은 `ValueListenable` 직접 구독"으로 책임 분리
+  - **기술 스택 의사결정** — 상태관리=Riverpod, 비디오=video_player, 데모 타깃=iOS 시뮬레이터, i18n=공식 gen-l10n, 코드젠 범위=모델 한정
+  - 코드 리뷰 및 방향 조정, UI 디테일 피드백(플레이 아이콘·로딩 스피너 위치 등)
+  - 시뮬레이터 동작 검증, 데모 영상 촬영
 - **가장 어려웠던 문제와 해결:** 위 **Q3** 참고.
 - **대화 기록:** 의미 있는 의사결정은 [`DEVLOG.md`](DEVLOG.md)에 `맥락→대안→결정→이유` 형식으로 정리했습니다. 전체 AI 대화 트랜스크립트(Claude Code 세션)는 _(링크/스크린샷 첨부)_.
 
