@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:video_player/video_player.dart';
 
@@ -21,6 +22,8 @@ class VideoManager extends ChangeNotifier {
 
   final Map<int, VideoPlayerController> _controllers = {};
   final Set<int> _errored = {};
+  final Set<int> _pending = {}; // 다운로드/초기화 진행 중 (중복 _ensure 방지)
+  final _cacheManager = DefaultCacheManager();
 
   int _currentIndex = 0;
   bool _userPaused = false; // 사용자가 현재 영상을 탭으로 일시정지함
@@ -123,13 +126,22 @@ class VideoManager extends ChangeNotifier {
   Future<void> _ensure(int index) async {
     final videos = _videos;
     if (index < 0 || index >= videos.length) return;
-    if (_controllers.containsKey(index) || _errored.contains(index)) return;
+    if (_controllers.containsKey(index) ||
+        _errored.contains(index) ||
+        _pending.contains(index)) {
+      return;
+    }
+    _pending.add(index);
 
-    final controller =
-        VideoPlayerController.networkUrl(Uri.parse(videos[index].videoUrl));
-    _controllers[index] = controller; // dispose 로직이 찾을 수 있게 먼저 등록
-
+    VideoPlayerController? controller;
     try {
+      // 디스크 캐시에서 파일을 얻는다(있으면 즉시, 없으면 받아서 캐시).
+      final file = await _cacheManager.getSingleFile(videos[index].videoUrl);
+      // 다운로드 도중 윈도우를 벗어났으면 컨트롤러를 만들지 않는다(누수 방지).
+      if (!_inWindow(index)) return;
+
+      controller = VideoPlayerController.file(file);
+      _controllers[index] = controller; // dispose 로직이 찾을 수 있게 등록
       await controller.initialize();
       // 초기화 도중 윈도우를 벗어났을 수 있다.
       if (!_inWindow(index)) {
@@ -144,11 +156,15 @@ class VideoManager extends ChangeNotifier {
       _playActive(index);
       notifyListeners();
     } catch (e) {
-      debugPrint('VideoManager: failed to init index $index: $e');
+      debugPrint('VideoManager: failed to load index $index: $e');
       _errored.add(index);
-      _controllers.remove(index);
-      await controller.dispose();
+      if (controller != null) {
+        _controllers.remove(index);
+        await controller.dispose();
+      }
       notifyListeners();
+    } finally {
+      _pending.remove(index);
     }
   }
 

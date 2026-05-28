@@ -75,3 +75,10 @@
 - **이유:** 데이터 모델은 필드가 많고 직렬화·동등성·copyWith가 반복돼 코드젠 이득이 크다. 반면 provider는 로직이 가볍고 코드젠을 넣으면 build_runner 의존성·생성 파일만 늘어 가독성이 떨어진다. **"코드젠은 보일러플레이트가 실제로 큰 데이터 모델에만 쓴다"**는 원칙에 따라 범위를 모델로 한정.
 - **데이터/리포지토리:** mixkit 공개 영상 10개로 교체(전부 reachable 검증). 필드 추가(`thumbnailUrl`, `bookmarkCount`), `avatarUrl`→`profileImageUrl`. `VideoRepository`는 JSON 풀을 한 번 로드·메모이즈 후 순환시켜 무한 스크롤을 시뮬레이션.
 - **검증:** build_runner 생성 성공, analyze 0 / 테스트 13 통과, 시뮬레이터에서 JSON 기반 첫 영상(golden_hour) 재생 확인.
+
+## 2026-05-28 — 영상 디스크 캐시 (flutter_cache_manager)
+- **맥락:** 윈도우를 오가며 같은 영상을 다시 볼 때 매번 네트워크로 재다운로드하는 비효율.
+- **대안:** (a) 캐시 없음(현행) (b) flutter_cache_manager 디스크 캐시 + `VideoPlayerController.file` (c) 커스텀 캐시 + LRU 상한/추상화 레이어.
+- **결정:** (b). `_ensure`에서 `DefaultCacheManager().getSingleFile(url)`로 로컬 파일을 얻어 `VideoPlayerController.file`로 init. `getSingleFile`/`initialize` await 도중 윈도우 이탈 대비해 기존 `_inWindow` 재검증 가드 유지. 다운로드 단계는 컨트롤러 등록 전이라 중복 `_ensure`를 막는 `_pending` 가드 추가.
+- **이유:** 재방문 시 디스크에서 즉시 재생 + 트래픽 절감. (c)의 LRU/추상화는 컨트롤러를 이미 ±1 윈도우로 한정하므로 과함 — 과제 범위 대비 복잡도만 키운다. 캐시 만료/용량은 flutter_cache_manager 기본 정책에 위임.
+- **검증:** 시뮬레이터 `Library/Caches/libCachedImageData`에 mp4 캐시 적재 확인(현재 윈도우 영상 2개, ~16MB), 재생 정상. analyze 0 / 테스트 13 통과.
