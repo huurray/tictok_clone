@@ -25,16 +25,23 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
   @override
   void initState() {
     super.initState();
-    _lifecycleListener =
-        AppLifecycleListener(onStateChange: _onLifecycleChange);
+    _lifecycleListener = AppLifecycleListener(
+      onStateChange: _onLifecycleChange,
+    );
   }
 
   void _onLifecycleChange(AppLifecycleState state) {
     final manager = ref.read(videoManagerProvider);
-    if (state == AppLifecycleState.resumed) {
-      manager.onAppResumed();
-    } else {
-      manager.onAppPaused();
+    switch (state) {
+      case AppLifecycleState.resumed:
+        manager.onAppResumed();
+      case AppLifecycleState.paused:
+      case AppLifecycleState.hidden:
+        manager.onAppPaused();
+      case AppLifecycleState.inactive:
+      case AppLifecycleState.detached:
+        // 일시적 상태(시작 중 blip·제어센터·앱 전환 미리보기)는 무시 — 재생 유지.
+        break;
     }
   }
 
