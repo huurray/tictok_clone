@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../core/constants/app_constants.dart';
-import '../providers/feed_provider.dart';
-import '../providers/video_manager.dart';
-import '../widgets/video_item.dart';
+import 'package:tiktok/core/constants/app_constants.dart';
+import 'package:tiktok/features/feed/providers/feed_provider.dart';
+import 'package:tiktok/features/feed/providers/video_manager.dart';
+import 'package:tiktok/features/feed/widgets/video_item.dart';
+import 'package:tiktok/l10n/gen/app_localizations.dart';
 
-/// The vertical short-video feed. Owns the [PageController], drives the
-/// [VideoManager] on page changes, triggers infinite-scroll loading near the
-/// end, and pauses playback on app background / screen exit.
+/// 세로 숏폼 영상 피드. [PageController]를 소유하고, 페이지 전환 시
+/// [VideoManager]를 구동하며, 끝 근처에서 무한 스크롤 로딩을 트리거하고,
+/// 앱 백그라운드/화면 이탈 시 재생을 멈춘다.
 class FeedScreen extends ConsumerStatefulWidget {
   const FeedScreen({super.key});
 
@@ -63,8 +64,11 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
             _ErrorView(onRetry: () => ref.invalidate(feedProvider)),
         data: (videos) {
           if (videos.isEmpty) {
-            return const Center(
-              child: Text('No videos', style: TextStyle(color: Colors.white70)),
+            return Center(
+              child: Text(
+                AppLocalizations.of(context).noVideos,
+                style: const TextStyle(color: Colors.white70),
+              ),
             );
           }
           if (!_activatedFirst) {
@@ -100,12 +104,15 @@ class _ErrorView extends StatelessWidget {
         children: [
           const Icon(Icons.error_outline, color: Colors.white70, size: 48),
           const SizedBox(height: 12),
-          const Text(
-            'Failed to load feed',
-            style: TextStyle(color: Colors.white70),
+          Text(
+            AppLocalizations.of(context).feedLoadError,
+            style: const TextStyle(color: Colors.white70),
           ),
           const SizedBox(height: 8),
-          TextButton(onPressed: onRetry, child: const Text('Retry')),
+          TextButton(
+            onPressed: onRetry,
+            child: Text(AppLocalizations.of(context).retry),
+          ),
         ],
       ),
     );

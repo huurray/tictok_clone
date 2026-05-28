@@ -1,0 +1,21 @@
+{
+  "@@locale": "en",
+  "navHome": "Home",
+  "@navHome": { "description": "Bottom navigation label for the feed tab" },
+  "navSettings": "Settings",
+  "@navSettings": { "description": "Bottom navigation label for the settings tab" },
+  "settingsTitle": "Settings",
+  "@settingsTitle": { "description": "Settings screen app bar title" },
+  "settingsLanguage": "Language",
+  "@settingsLanguage": { "description": "Language section header in settings" },
+  "settingsLanguageDescription": "Choose your preferred language",
+  "@settingsLanguageDescription": { "description": "Subtitle under the language section" },
+  "feedLoadError": "Failed to load feed",
+  "@feedLoadError": { "description": "Shown when the feed fails to load" },
+  "videoLoadError": "Couldn't load video",
+  "@videoLoadError": { "description": "Shown when a single video fails to load" },
+  "noVideos": "No videos",
+  "@noVideos": { "description": "Shown when the feed is empty" },
+  "retry": "Retry",
+  "@retry": { "description": "Retry button label" }
+}

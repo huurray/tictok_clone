@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:video_player/video_player.dart';
 
-import '../../../core/theme/app_theme.dart';
-import '../providers/video_manager.dart';
+import 'package:tiktok/core/theme/app_theme.dart';
+import 'package:tiktok/features/feed/providers/video_manager.dart';
+import 'package:tiktok/l10n/gen/app_localizations.dart';
 
-/// Renders the controller for [index] from the [VideoManager], covering the
-/// screen. Shows a spinner while uninitialized/buffering, a play glyph when the
-/// active video is paused, and a retry affordance on load failure.
+/// [VideoManager]에서 [index]의 컨트롤러를 가져와 화면을 가득 채워 렌더한다.
+/// 미초기화/버퍼링 중에는 스피너, 활성 영상이 일시정지면 재생 아이콘,
+/// 로드 실패 시 재시도 UI를 보여준다.
 class VideoPlayerView extends ConsumerWidget {
   final int index;
 
@@ -95,12 +96,15 @@ class _ErrorRetry extends StatelessWidget {
           children: [
             const Icon(Icons.videocam_off, color: Colors.white70, size: 48),
             const SizedBox(height: 12),
-            const Text(
-              "Couldn't load video",
-              style: TextStyle(color: Colors.white70),
+            Text(
+              AppLocalizations.of(context).videoLoadError,
+              style: const TextStyle(color: Colors.white70),
             ),
             const SizedBox(height: 8),
-            TextButton(onPressed: onRetry, child: const Text('Retry')),
+            TextButton(
+              onPressed: onRetry,
+              child: Text(AppLocalizations.of(context).retry),
+            ),
           ],
         ),
       ),

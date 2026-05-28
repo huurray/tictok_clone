@@ -1,0 +1,12 @@
+{
+  "@@locale": "ko",
+  "navHome": "홈",
+  "navSettings": "설정",
+  "settingsTitle": "설정",
+  "settingsLanguage": "언어",
+  "settingsLanguageDescription": "사용할 언어를 선택하세요",
+  "feedLoadError": "피드를 불러오지 못했어요",
+  "videoLoadError": "영상을 불러올 수 없어요",
+  "noVideos": "영상이 없습니다",
+  "retry": "다시 시도"
+}
