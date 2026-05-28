@@ -41,7 +41,10 @@ class SettingsScreen extends ConsumerWidget {
           const SizedBox(height: 4),
           Text(
             l10n.settingsLanguageDescription,
-            style: const TextStyle(color: AppColors.textSecondary, fontSize: 14),
+            style: const TextStyle(
+              color: AppColors.textSecondary,
+              fontSize: 14,
+            ),
           ),
           const SizedBox(height: 16),
           for (final option in _languageOptions)

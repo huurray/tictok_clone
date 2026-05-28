@@ -54,5 +54,6 @@ class FeedNotifier extends AsyncNotifier<List<VideoModel>> {
   }
 }
 
-final feedProvider =
-    AsyncNotifierProvider<FeedNotifier, List<VideoModel>>(FeedNotifier.new);
+final feedProvider = AsyncNotifierProvider<FeedNotifier, List<VideoModel>>(
+  FeedNotifier.new,
+);

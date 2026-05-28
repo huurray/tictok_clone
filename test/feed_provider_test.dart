@@ -30,10 +30,8 @@ class _FakeRepo extends VideoRepository {
 }
 
 ProviderContainer _makeContainer() => ProviderContainer(
-      overrides: [
-        videoRepositoryProvider.overrideWith((ref) => _FakeRepo()),
-      ],
-    );
+  overrides: [videoRepositoryProvider.overrideWith((ref) => _FakeRepo())],
+);
 
 void main() {
   test('build loads the first page', () async {

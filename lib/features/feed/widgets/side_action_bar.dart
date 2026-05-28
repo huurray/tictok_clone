@@ -6,7 +6,7 @@ import 'package:tiktok/core/utils/number_format.dart';
 import 'package:tiktok/data/models/video_model.dart';
 import 'package:tiktok/features/feed/widgets/toggle_action_button.dart';
 
-/// 우측 세로 액션 컬럼: 아바타, 좋아요, 댓글, 공유, 음악 디스크.
+/// 우측 세로 액션 컬럼: 아바타, 좋아요, 댓글, 북마크, 공유, 음악 디스크.
 class SideActionBar extends StatelessWidget {
   final VideoModel video;
   final VoidCallback onLikeTap;
@@ -104,7 +104,8 @@ class _Avatar extends StatelessWidget {
               child: CachedNetworkImage(
                 imageUrl: url,
                 fit: BoxFit.cover,
-                placeholder: (_, _) => const ColoredBox(color: AppColors.surface),
+                placeholder: (_, _) =>
+                    const ColoredBox(color: AppColors.surface),
                 errorWidget: (_, _, _) =>
                     const Icon(Icons.person, color: Colors.white),
               ),
@@ -169,7 +170,8 @@ class _MusicDiscState extends State<_MusicDisc>
             imageUrl: widget.url,
             fit: BoxFit.cover,
             placeholder: (_, _) => const ColoredBox(color: AppColors.surface),
-            errorWidget: (_, _, _) => const ColoredBox(color: AppColors.surface),
+            errorWidget: (_, _, _) =>
+                const ColoredBox(color: AppColors.surface),
           ),
         ),
       ),

@@ -2,19 +2,19 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tiktok/data/models/video_model.dart';
 
 VideoModel _make({int likeCount = 10, bool isLiked = false}) => VideoModel(
-      id: '1',
-      videoUrl: 'u',
-      thumbnailUrl: 't',
-      username: '@u',
-      caption: 'c',
-      musicTitle: 'm',
-      profileImageUrl: 'a',
-      likeCount: likeCount,
-      commentCount: 0,
-      bookmarkCount: 0,
-      shareCount: 0,
-      isLiked: isLiked,
-    );
+  id: '1',
+  videoUrl: 'u',
+  thumbnailUrl: 't',
+  username: '@u',
+  caption: 'c',
+  musicTitle: 'm',
+  profileImageUrl: 'a',
+  likeCount: likeCount,
+  commentCount: 0,
+  bookmarkCount: 0,
+  shareCount: 0,
+  isLiked: isLiked,
+);
 
 void main() {
   group('VideoModel.toggleLike', () {

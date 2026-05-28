@@ -36,8 +36,7 @@ class VideoManager extends ChangeNotifier {
 
   bool isErrored(int index) => _errored.contains(index);
 
-  List<VideoModel> get _videos =>
-      _ref.read(feedProvider).value ?? const [];
+  List<VideoModel> get _videos => _ref.read(feedProvider).value ?? const [];
 
   // ---- 공개 API ---------------------------------------------------------
 

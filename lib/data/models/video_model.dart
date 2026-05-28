@@ -30,9 +30,9 @@ abstract class VideoModel with _$VideoModel {
 
   /// [isLiked]를 토글하고 [likeCount]를 그에 맞게 조정한 복사본을 반환한다.
   VideoModel toggleLike() => copyWith(
-        isLiked: !isLiked,
-        likeCount: isLiked ? likeCount - 1 : likeCount + 1,
-      );
+    isLiked: !isLiked,
+    likeCount: isLiked ? likeCount - 1 : likeCount + 1,
+  );
 
   /// 좋아요 상태로 만든 복사본을 반환한다(멱등 — 취소 없는 더블탭용).
   VideoModel liked() =>
@@ -40,7 +40,7 @@ abstract class VideoModel with _$VideoModel {
 
   /// [isBookmarked]를 토글하고 [bookmarkCount]를 그에 맞게 조정한 복사본을 반환한다.
   VideoModel toggleBookmark() => copyWith(
-        isBookmarked: !isBookmarked,
-        bookmarkCount: isBookmarked ? bookmarkCount - 1 : bookmarkCount + 1,
-      );
+    isBookmarked: !isBookmarked,
+    bookmarkCount: isBookmarked ? bookmarkCount - 1 : bookmarkCount + 1,
+  );
 }

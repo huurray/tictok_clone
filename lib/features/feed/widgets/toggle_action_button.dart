@@ -36,11 +36,17 @@ class _ToggleActionButtonState extends State<ToggleActionButton>
 
   late final Animation<double> _scale = TweenSequence<double>([
     TweenSequenceItem(
-      tween: Tween(begin: 1.0, end: 1.35).chain(CurveTween(curve: Curves.easeOut)),
+      tween: Tween(
+        begin: 1.0,
+        end: 1.35,
+      ).chain(CurveTween(curve: Curves.easeOut)),
       weight: 50,
     ),
     TweenSequenceItem(
-      tween: Tween(begin: 1.35, end: 1.0).chain(CurveTween(curve: Curves.easeIn)),
+      tween: Tween(
+        begin: 1.35,
+        end: 1.0,
+      ).chain(CurveTween(curve: Curves.easeIn)),
       weight: 50,
     ),
   ]).animate(_controller);

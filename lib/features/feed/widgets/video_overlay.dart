@@ -47,7 +47,9 @@ class VideoOverlay extends ConsumerWidget {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Expanded(child: IgnorePointer(child: BottomInfo(video: video))),
+                    Expanded(
+                      child: IgnorePointer(child: BottomInfo(video: video)),
+                    ),
                     const SizedBox(width: 8),
                     SideActionBar(
                       video: video,
