@@ -16,11 +16,11 @@ flutter run -d <ios-sim-id>           # flutter devices 로 id 확인
 
 ## 아키텍처 (feature-first)
 - `lib/core/` — 횡단 관심사: `theme/app_theme.dart`(디자인 토큰), `constants/app_constants.dart`(preloadWindow/pageSize), `utils/number_format.dart`.
-- `lib/data/` — `models/`(VideoModel), `sources/`(mock_videos), `repositories/`(VideoRepository: 시뮬레이션 페이지네이션).
+- `lib/data/` — `models/`(VideoModel: freezed + json_serializable), `repositories/`(VideoRepository: `assets/mock/videos.json`을 rootBundle로 로드 + 시뮬레이션 페이지네이션).
 - `lib/features/feed/` — `providers/`(feed_provider, video_manager), `screens/`(feed_screen), `widgets/`(player/overlay/제스처 컴포넌트).
 
 ## Riverpod 컨벤션
-- plain Notifier/AsyncNotifier 패턴 사용 (code-gen/build_runner 미사용).
+- 상태관리(provider)는 plain Notifier/AsyncNotifier — code-gen 미적용. build_runner는 **데이터 모델(freezed + json_serializable)에만** 사용(코드젠은 보일러플레이트가 큰 모델에 한정).
 - 데이터·오케스트레이션은 Riverpod, 영상 프레임 단위 값(`isBuffering` 등)은 `VideoPlayerController`의 `ValueListenable`을 위젯에서 직접 구독.
 - 리소스 보유 객체(VideoManager)는 `Provider` + `ref.onDispose`로 정리.
 
