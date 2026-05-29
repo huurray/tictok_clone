@@ -32,7 +32,10 @@ flutter run                # 기기 여러 개면 flutter run -d <device-id>
 ```
 
 > 생성 코드(freezed / json_serializable / l10n)는 저장소에 포함되어 있어 바로 실행됩니다.
-> 모델·다국어 문자열을 수정했다면 다시 생성하세요: `dart run build_runner build`
+> 생성 방식은 두 가지로 나뉩니다 — 수정한 쪽만 다시 생성하세요:
+>
+> - 모델(freezed/json_serializable): `dart run build_runner build`
+> - 다국어(ARB → l10n): `flutter gen-l10n` (또는 `flutter run` 시 `generate: true`로 자동 생성)
 
 **검증**
 
@@ -90,7 +93,7 @@ lib/
 assets/mock/videos.json           # mock 피드 데이터
 ```
 
-설계 문서: [`DESIGN.md`](DESIGN.md)(디자인 시스템) · [`DEVLOG.md`](DEVLOG.md)(의사결정 로그) · [`CLAUDE.md`](CLAUDE.md)(코드베이스 가이드).
+설계 문서: [`DESIGN.md`](DESIGN.md)(디자인 시스템) · [`DEVLOG.md`](DEVLOG.md)(의사결정 로그) · [`MIGRATION.md`](MIGRATION.md)(RN 포팅 분석) · [`CLAUDE.md`](CLAUDE.md)(코드베이스 가이드).
 
 ---
 
@@ -119,6 +122,16 @@ assets/mock/videos.json           # mock 피드 데이터
 - 영상 디스크 캐시(`flutter_cache_manager`) — 재방문 즉시 재생 + 트래픽 절감
 - 썸네일 로딩 포스터 — 다운로드 중 정지컷 표시로 지연 체감 완화
 - 앱 백그라운드/복귀 시 일시정지·재개, 영상 로드 실패 시 재시도 UI
+
+---
+
+## React Native 포팅 분석 — [`MIGRATION.md`](MIGRATION.md)
+
+지원 직무가 **React Native**이고 "기존 Flutter 코드베이스를 읽고 RN으로 포팅"하는 업무가 포함되어, 본 과제를 Flutter로 구현한 뒤 **"이 앱을 React Native로 포팅한다면?"** 을 직접 설계해 [`MIGRATION.md`](MIGRATION.md)로 정리했습니다.
+
+- **스택 매핑** — Riverpod→Zustand/TanStack Query, `video_player`→`expo-video`, `PageView`→`FlatList`, `IgnorePointer`→`pointerEvents="none"` 등 계층별 대응.
+- **핵심 코드 before→after** — 불변 모델 / 무한 스크롤(`useInfiniteQuery`) / **비디오 재생 생명주기**(`FlatList` viewability) / 제스처·오버레이.
+- **핵심 인사이트** — 슬라이딩 윈도우·불변 상태·책임 분리 같은 **설계 결정은 프레임워크에 독립적**이라 1:1 전이되고, 윈도우 관리·페이지네이션은 RN이 더 선언적으로 제공하지만(`FlatList` 가상화·`useInfiniteQuery`) **디코더 상한·레이스 가드·단일 재생**은 어느 쪽이든 직접 책임진다.
 
 ---
 
